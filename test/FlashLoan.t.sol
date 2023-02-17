@@ -12,6 +12,8 @@ contract CounterTest is Test {
     Token public token;
     address public alice = address(0x123);
 
+    event LoanReceived(address indexed token, uint256 amount);
+
     function setUp() public {
         token = new Token("Soup Token", "SOUP", 1000000);
         flashLoan = new FlashLoan(address(token));
@@ -25,6 +27,8 @@ contract CounterTest is Test {
     }
 
     function testBorrowingFunds() public {
+        vm.expectEmit(true, false, false, true);
+        emit LoanReceived(address(token), 100);
         flashLoanReciever.executeFlashLoan(100);
     }
 }
